@@ -1,0 +1,290 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Font Faces ────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/assets/fonts/BricolageGrotesque-Variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("/assets/fonts/Outfit-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/assets/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  :root {
+    --radius: 0.75rem;
+
+    /* Deep navy/charcoal background */
+    --background: 0.14 0.025 255;
+    --foreground: 0.94 0.010 240;
+
+    /* Cards: slightly lighter navy */
+    --card: 0.18 0.030 255;
+    --card-foreground: 0.94 0.010 240;
+
+    /* Popover */
+    --popover: 0.16 0.028 255;
+    --popover-foreground: 0.94 0.010 240;
+
+    /* Primary: electric cyan/teal */
+    --primary: 0.72 0.19 205;
+    --primary-foreground: 0.10 0.020 255;
+
+    /* Secondary: navy panel */
+    --secondary: 0.20 0.035 255;
+    --secondary-foreground: 0.78 0.020 240;
+
+    /* Muted */
+    --muted: 0.22 0.030 255;
+    --muted-foreground: 0.58 0.030 240;
+
+    /* Accent: vibrant cyan */
+    --accent: 0.65 0.22 200;
+    --accent-foreground: 0.10 0.020 255;
+
+    /* Destructive */
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0.005 75;
+
+    /* Success */
+    --success: 0.63 0.17 152;
+    --success-foreground: 0.98 0.005 75;
+
+    /* Borders */
+    --border: 0.27 0.040 255;
+    --input: 0.25 0.035 255;
+    --ring: 0.72 0.19 205;
+
+    /* Brand tokens */
+    --cyan: 0.72 0.19 205;
+    --cyan-light: 0.85 0.12 200;
+    --cyan-dark: 0.52 0.18 205;
+    --whatsapp: 0.63 0.18 152;
+    --whatsapp-dark: 0.50 0.16 152;
+    --orange: 0.72 0.20 48;
+    --orange-light: 0.88 0.12 55;
+    --ink: 0.10 0.020 255;
+
+    /* Charts */
+    --chart-1: 0.72 0.19 205;
+    --chart-2: 0.63 0.18 152;
+    --chart-3: 0.72 0.20 48;
+    --chart-4: 0.65 0.20 320;
+    --chart-5: 0.58 0.18 35;
+
+    /* Sidebar */
+    --sidebar: 0.14 0.025 255;
+    --sidebar-foreground: 0.94 0.010 240;
+    --sidebar-primary: 0.72 0.19 205;
+    --sidebar-primary-foreground: 0.10 0.020 255;
+    --sidebar-accent: 0.20 0.035 255;
+    --sidebar-accent-foreground: 0.78 0.020 240;
+    --sidebar-border: 0.27 0.040 255;
+    --sidebar-ring: 0.72 0.19 205;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Outfit", sans-serif;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, oklch(0.25 0.08 255 / 0.35) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, oklch(0.20 0.06 200 / 0.25) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "Bricolage Grotesque", sans-serif;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+}
+
+/* ── Brand utility classes ─────────────────────────────────────── */
+.text-cyan-brand {
+  color: oklch(var(--cyan));
+}
+
+.text-whatsapp {
+  color: oklch(var(--whatsapp));
+}
+
+.text-orange-brand {
+  color: oklch(var(--orange));
+}
+
+.bg-cyan-brand {
+  background-color: oklch(var(--cyan));
+}
+
+.bg-whatsapp {
+  background-color: oklch(var(--whatsapp));
+}
+
+/* ── Product card ─────────────────────────────────────────────── */
+.product-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 20px 60px oklch(0.72 0.19 205 / 0.12),
+    0 4px 20px oklch(0 0 0 / 0.30);
+}
+
+/* ── Hero gradient overlay ─────────────────────────────────────── */
+.hero-overlay {
+  background: linear-gradient(
+    105deg,
+    oklch(0.10 0.04 255 / 0.88) 0%,
+    oklch(0.10 0.04 255 / 0.55) 45%,
+    transparent 100%
+  );
+}
+
+/* ── Floating WhatsApp button pulse ─────────────────────────────── */
+@keyframes wa-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.63 0.18 152 / 0.5); }
+  50%       { box-shadow: 0 0 0 12px oklch(0.63 0.18 152 / 0); }
+}
+
+.wa-float-btn {
+  animation: wa-pulse 2.5s ease-in-out infinite;
+}
+
+/* ── Glow card effect ──────────────────────────────────────────── */
+.glow-card {
+  position: relative;
+}
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    oklch(0.72 0.19 205 / 0.4),
+    oklch(0.27 0.040 255 / 0.0),
+    oklch(0.72 0.19 205 / 0.2)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── Trust badge shimmer ───────────────────────────────────────── */
+.trust-badge {
+  background: linear-gradient(
+    135deg,
+    oklch(0.20 0.035 255),
+    oklch(0.24 0.045 255)
+  );
+  border: 1px solid oklch(0.35 0.06 255);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.trust-badge:hover {
+  border-color: oklch(0.72 0.19 205 / 0.5);
+  box-shadow: 0 0 20px oklch(0.72 0.19 205 / 0.10);
+}
+
+/* ── Delivery banner ───────────────────────────────────────────── */
+.delivery-banner {
+  background: linear-gradient(
+    90deg,
+    oklch(0.50 0.18 152),
+    oklch(0.55 0.20 165),
+    oklch(0.50 0.18 152)
+  );
+  background-size: 200% 100%;
+  animation: banner-slide 4s linear infinite;
+}
+
+@keyframes banner-slide {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+/* ── Section divider ───────────────────────────────────────────── */
+.section-rule {
+  height: 1px;
+  background: linear-gradient(to right, transparent, oklch(var(--border)), transparent);
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: oklch(0.14 0.025 255);
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.27 0.040 255);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.72 0.19 205);
+}
+
+/* ── Focus-visible ─────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid oklch(var(--ring));
+  outline-offset: 2px;
+}
+
+/* ── Keyframes ─────────────────────────────────────────────────── */
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .product-card,
+  .wa-float-btn,
+  .delivery-banner {
+    animation: none;
+    transition: none;
+  }
+}
