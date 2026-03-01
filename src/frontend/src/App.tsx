@@ -1,4 +1,11 @@
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Toaster } from "@/components/ui/sonner";
 import { useIsAdmin } from "@/hooks/useShopQueries";
 import ShopAdmin from "@/pages/ShopAdmin";
@@ -204,95 +211,180 @@ function Header() {
   );
 }
 
+function RefundPolicyModal({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-md bg-card border-border">
+        <DialogHeader>
+          <DialogTitle className="font-display text-xl font-bold text-foreground">
+            Refund Policy
+          </DialogTitle>
+        </DialogHeader>
+        <div className="text-sm text-muted-foreground leading-relaxed space-y-3 mt-1">
+          <p>
+            All sales are final. If you receive a defective or incorrect
+            product, please contact us within 24 hours via WhatsApp or email.
+          </p>
+          <p>
+            Refunds are processed within 7 business days after verification.
+          </p>
+          <div className="rounded-lg bg-muted/50 border border-border px-4 py-3 space-y-1">
+            <p className="font-semibold text-foreground text-sm">Contact Us:</p>
+            <a
+              href="https://wa.me/919813983483"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-[#25D366] hover:underline"
+            >
+              WhatsApp: +91 98139 83483
+            </a>
+            <a
+              href="mailto:warisbhaimewati@gmail.com"
+              className="block text-cyan-brand hover:underline"
+            >
+              warisbhaimewati@gmail.com
+            </a>
+          </div>
+        </div>
+        <Button
+          type="button"
+          onClick={onClose}
+          className="mt-2 w-full bg-cyan-brand text-ink hover:bg-cyan-light font-semibold"
+        >
+          Close
+        </Button>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function Footer() {
   const year = new Date().getFullYear();
   const hostname = encodeURIComponent(window.location.hostname);
+  const [refundOpen, setRefundOpen] = useState(false);
 
   return (
-    <footer className="border-t border-border mt-20 py-10 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mb-8">
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-2.5 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-cyan-brand flex items-center justify-center">
-                <Phone className="w-4 h-4 text-ink fill-current" />
-              </div>
-              <span className="font-display font-bold text-xl text-foreground">
-                Waris Bhai <span className="text-cyan-brand">Mobiles</span>
-              </span>
-            </div>
-            <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
-              Your trusted destination for the latest smartphones and
-              accessories in Mewat.
-            </p>
-          </div>
-
-          {/* Nav + Contact */}
-          <div className="flex flex-col sm:flex-row gap-8">
+    <>
+      <footer className="border-t border-border mt-20 py-10 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mb-8">
+            {/* Brand */}
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
-                Pages
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-cyan-brand flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-ink fill-current" />
+                </div>
+                <span className="font-display font-bold text-xl text-foreground">
+                  Waris Bhai <span className="text-cyan-brand">Mobiles</span>
+                </span>
+              </div>
+              <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
+                Your trusted destination for the latest smartphones and
+                accessories in Mewat.
               </p>
-              <nav className="flex flex-col gap-2 text-sm">
-                {NAV_ITEMS.map(({ to, label }) => (
+            </div>
+
+            {/* Nav + Contact */}
+            <div className="flex flex-col sm:flex-row gap-8">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+                  Pages
+                </p>
+                <nav className="flex flex-col gap-2 text-sm">
+                  {NAV_ITEMS.map(({ to, label }) => (
+                    <Link
+                      key={to}
+                      to={to}
+                      className="text-muted-foreground hover:text-cyan-brand transition-colors"
+                    >
+                      {label}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Quick Links */}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+                  Quick Links
+                </p>
+                <div className="flex flex-col gap-2 text-sm">
                   <Link
-                    key={to}
-                    to={to}
+                    to="/contact"
+                    search={{ product: "" }}
                     className="text-muted-foreground hover:text-cyan-brand transition-colors"
                   >
-                    {label}
+                    Contact Us
                   </Link>
-                ))}
-              </nav>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
-                Contact
-              </p>
-              <div className="flex flex-col gap-2 text-sm">
-                <a
-                  href={WHATSAPP_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-whatsapp hover:text-white transition-colors"
-                >
-                  +91 98139 83483
-                </a>
-                <a
-                  href="mailto:warisbhaimewati@gmail.com"
-                  className="text-muted-foreground hover:text-cyan-brand transition-colors"
-                >
-                  warisbhaimewati@gmail.com
-                </a>
+                  <button
+                    type="button"
+                    onClick={() => setRefundOpen(true)}
+                    className="text-left text-muted-foreground hover:text-cyan-brand transition-colors"
+                  >
+                    Refund Policy
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+                  Contact
+                </p>
+                <div className="flex flex-col gap-2 text-sm">
+                  <a
+                    href={WHATSAPP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-whatsapp hover:text-white transition-colors"
+                  >
+                    +91 98139 83483
+                  </a>
+                  <a
+                    href="mailto:warisbhaimewati@gmail.com"
+                    className="text-muted-foreground hover:text-cyan-brand transition-colors"
+                  >
+                    warisbhaimewati@gmail.com
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="section-rule mb-6" />
+          <div className="section-rule mb-6" />
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-whatsapp/20 flex items-center justify-center">
-              <span className="text-whatsapp">✓</span>
-            </span>
-            <span>Verified Seller · Mewat, Haryana</span>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-whatsapp/20 flex items-center justify-center">
+                <span className="text-whatsapp">✓</span>
+              </span>
+              <span>Verified Seller · Mewat, Haryana</span>
+            </div>
+            <p>
+              © {year}. Built with ❤️ using{" "}
+              <a
+                href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${hostname}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-cyan-brand hover:text-cyan-light transition-colors"
+              >
+                caffeine.ai
+              </a>
+            </p>
           </div>
-          <p>
-            © {year}. Built with ❤️ using{" "}
-            <a
-              href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${hostname}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-cyan-brand hover:text-cyan-light transition-colors"
-            >
-              caffeine.ai
-            </a>
-          </p>
         </div>
-      </div>
-    </footer>
+      </footer>
+
+      <RefundPolicyModal
+        open={refundOpen}
+        onClose={() => setRefundOpen(false)}
+      />
+    </>
   );
 }
 

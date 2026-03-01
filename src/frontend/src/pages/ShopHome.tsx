@@ -83,6 +83,8 @@ const SAMPLE_PRODUCTS: Product[] = [
   },
 ];
 
+const BRANDS = ["All", "Samsung", "Apple", "Vivo", "Oppo", "Xiaomi"];
+
 const TRUST_BADGES = [
   {
     icon: Shield,
@@ -117,6 +119,22 @@ const TRUST_BADGES = [
     border: "border-yellow-400/20",
   },
 ];
+
+function filterByBrand(products: Product[], brand: string): Product[] {
+  if (brand === "All") return products;
+  const b = brand.toLowerCase();
+  if (b === "xiaomi") {
+    return products.filter((p) => {
+      const name = p.name.toLowerCase();
+      return (
+        name.includes("xiaomi") ||
+        name.includes("redmi") ||
+        name.includes("poco")
+      );
+    });
+  }
+  return products.filter((p) => p.name.toLowerCase().includes(b));
+}
 
 function ProductSkeleton() {
   return (
@@ -233,11 +251,14 @@ export default function ShopHome() {
   const { data: backendProducts, isLoading } = useProducts();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [checkoutProduct, setCheckoutProduct] = useState<Product | null>(null);
+  const [activeBrand, setActiveBrand] = useState("All");
 
-  const displayProducts =
+  const allProducts =
     backendProducts && backendProducts.length > 0
       ? backendProducts.slice(0, 6)
       : SAMPLE_PRODUCTS;
+
+  const displayProducts = filterByBrand(allProducts, activeBrand);
 
   return (
     <main>
@@ -270,14 +291,12 @@ export default function ShopHome() {
                 </motion.div>
 
                 <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-                  Latest Smartphones
-                  <br />
-                  <span className="text-cyan-brand">Best Prices</span>
+                  Premium Used Mobiles
                 </h1>
 
                 <p className="text-white/75 text-base sm:text-lg mb-8 leading-relaxed max-w-lg">
-                  Top brands like Apple, Samsung, OnePlus & more. Order on
-                  WhatsApp and get same-day delivery in Mewat.
+                  Buy quality second-hand and new smartphones at unbeatable
+                  prices. Samsung, Apple, Vivo, Oppo, Xiaomi — all available.
                 </p>
 
                 <motion.div
@@ -301,14 +320,17 @@ export default function ShopHome() {
                     </svg>
                     Chat on WhatsApp
                   </a>
-                  <Link to="/products">
-                    <Button
-                      size="lg"
-                      className="h-12 px-6 bg-cyan-brand text-ink hover:bg-cyan-light font-semibold border-none"
-                    >
-                      Browse Phones <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                  </Link>
+                  <Button
+                    size="lg"
+                    onClick={() =>
+                      document
+                        .getElementById("featured-phones")
+                        ?.scrollIntoView({ behavior: "smooth" })
+                    }
+                    className="h-12 px-6 bg-cyan-brand text-ink hover:bg-cyan-light font-semibold border-none"
+                  >
+                    Shop Now <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
                 </motion.div>
               </motion.div>
             </div>
@@ -360,8 +382,37 @@ export default function ShopHome() {
         </div>
       </section>
 
+      {/* ── Brand Filter ──────────────────────────────────────────── */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-6">
+        <div
+          className="flex gap-2 overflow-x-auto py-2"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {BRANDS.map((brand) => {
+            const isActive = activeBrand === brand;
+            return (
+              <button
+                key={brand}
+                type="button"
+                onClick={() => setActiveBrand(brand)}
+                className={`shrink-0 px-5 py-2 rounded-full text-sm font-semibold transition-all border ${
+                  isActive
+                    ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                    : "bg-transparent text-foreground border-border hover:border-blue-400 hover:text-blue-600"
+                }`}
+              >
+                {brand}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* ── Featured Phones ───────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+      <section
+        id="featured-phones"
+        className="max-w-6xl mx-auto px-4 sm:px-6 pb-16"
+      >
         <div className="flex items-end justify-between mb-10">
           <div>
             <p className="text-cyan-brand text-sm font-semibold uppercase tracking-widest mb-2">
@@ -386,6 +437,18 @@ export default function ShopHome() {
             {[0, 1, 2, 3, 4, 5].map((k) => (
               <ProductSkeleton key={k} />
             ))}
+          </div>
+        ) : displayProducts.length === 0 ? (
+          <div className="py-16 text-center">
+            <div className="w-16 h-16 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto mb-4">
+              <ShoppingBag className="w-7 h-7 text-blue-400" />
+            </div>
+            <p className="text-foreground font-semibold mb-1">
+              No {activeBrand} phones listed yet
+            </p>
+            <p className="text-muted-foreground text-sm">
+              Chat with us on WhatsApp to ask for availability.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
